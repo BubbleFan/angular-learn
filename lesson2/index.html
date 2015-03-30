@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>myApp</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui" />
+	<link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.min.js"></script> 
+	<style type="text/css">
+		html,body{
+			margin: 0;
+			background-color: #ffffff;
+			overflow-y: scroll;
+		}
+		div,p,ul,li,h1,h2,h3,h4,h5,h6,span,em,strong,i,a{
+			font-size: 0.375rem;
+			font-weight: 100;
+			margin: 0;
+			padding: 0;
+		}
+		html:-moz-full-screen{
+			width: 100%;
+			height: 100%;
+		    background-color: red; 
+		} 
+
+		html:-webkit-full-screen{
+			width: 100%;
+			height: 100%;
+		    background-color: red; 
+		} 
+
+		html:fullscreen{
+			width: 100%;
+			height: 100%;
+		    background-color: red; 
+		}
+
+		.ui_bar{
+			height: 1.25rem;
+			border-bottom: 1px solid #333333;
+		}
+		.ui_camera{
+			width: 1.25rem;
+			height: 1.25rem;
+			font-size: 1rem;
+			line-height: 1.25rem;
+			display: inline-block;
+			text-align: center;
+			background-color: #ffffff;
+			color: #ff5500;
+		}
+		#video{
+			width: 10rem;
+			/*height: 5rem;*/
+		}
+	</style>
+
+</head>
+<body ng-app="myApp">
+	<div ng-controller="bar" class="ui_bar" id="bar">
+		<!-- <a href="">{{ name }}</a>
+		<h1>{{name}}</h1>
+		<p>{{name}}</p> -->
+		<a href="javascript:;" ng-click="camera()" class="fa fa-camera-retro ui_camera" id="camera"></a>
+
+	</div>
+	<video id="video" autoplay=""></video>
+	
+	<div id="snap">1223333</div>
+
+	<canvas id="canvas"></canvas>
+</body>
+<script>
+	var window_click = true;
+	window.addEventListener("click", function(){
+		if(window_click){
+			window_click = false;
+			function launchFullScreen(element) {
+				if(element.requestFullscreen) {
+					element.requestFullscreen();
+				}else if(element.mozRequestFullScreen) {
+					element.mozRequestFullScreen();
+				}else if(element.webkitRequestFullscreen) {
+					element.webkitRequestFullscreen();
+				}else if(element.msRequestFullscreen) {
+					element.msRequestFullscreen();
+				}
+			}
+			launchFullScreen(document.documentElement);
+			(function reSetRem(){
+				var body = document.getElementsByTagName("html")[0];
+				var rem = screen.availWidth/10;
+				body.style.fontSize = rem+"px";
+				body.style.height = screen.availHeight+"px";
+			})();
+		}else{
+			return false;
+		}
+	});
+	
+	
+
+</script>
+<script type="text/javascript">
+
+	var myApp = angular.module("myApp", []);
+	myApp.controller("bar", function ($scope){
+		$scope.name = "Index";
+		// console.log($scope);
+
+	});
+
+	document.documentElement.webkitRequestFullScreen();
+	// document.documentElement.mozRequestFullScreen();
+
+</script>
+<script type="text/javascript">
+	
+	document.getElementById("camera").addEventListener("click", function() {
+		// Grab elements, create settings, etc.
+		var canvas = document.getElementById("canvas"),
+			context = canvas.getContext("2d"),
+			video = document.getElementById("video"),
+			videoObj = { "video": true },
+			errBack = function(error) {
+				console.log("Video capture error: ", error.code); 
+			};
+		video.style.height = screen.availHeight+"px";
+		// Put video listeners into place
+		if(navigator.getUserMedia) { // Standard
+			navigator.getUserMedia(videoObj, function(stream) {
+				video.src = stream;
+				video.play();
+			}, errBack);
+		} else if(navigator.webkitGetUserMedia) { // WebKit-prefixed
+			navigator.webkitGetUserMedia(videoObj, function(stream){
+				video.src = window.webkitURL.createObjectURL(stream);
+				video.play();
+			}, errBack);
+		} else if(navigator.mozGetUserMedia) { // moz-prefixed
+			navigator.mozGetUserMedia(videoObj, function(stream){
+				video.src = window.URL.createObjectURL(stream);
+				video.play();
+			}, errBack);
+		}
+
+		// Trigger photo take
+		document.getElementById("snap").addEventListener("click", function() {
+			context.drawImage(video, 0, 0, 640, 480);
+		});
+	}, false);
+</script>
+</html>
