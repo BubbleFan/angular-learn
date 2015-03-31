@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>myApp</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui" />
+	<link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.min.js"></script>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.10/angular-route.min.js"></script>
+	<style type="text/css">
+		html,body{
+			margin: 0;
+			background-color: #ffffff;
+			overflow-y: scroll;
+		}
+		div,p,ul,li,h1,h2,h3,h4,h5,h6,span,em,strong,i,a{
+			font-size: 0.375rem;
+			font-weight: 100;
+			margin: 0;
+			padding: 0;
+		}
+		.ui_bar{
+			height: 1.25rem;
+			border-bottom: 1px solid #333333;
+			background-color: #ff5500;
+		}
+	</style>
+
+</head>
+<body ng-app="myApp">
+<!-- 	<div ng-controller="bar" class="ui_bar" id="bar">
+		<a href="">{{ name }}</a>
+		<h1>{{name}}</h1>
+		<p>{{name}}</p>
+		<a href="{{}}">{{}}</a>
+	</div> -->
+	<div ng-view></div>
+</body>
+<script>
+	var window_click = true;
+	window.addEventListener("click", function(){
+		if(window_click){
+			window_click = false;
+			function launchFullScreen(element) {
+				if(element.requestFullscreen) {
+					element.requestFullscreen();
+				}else if(element.mozRequestFullScreen) {
+					element.mozRequestFullScreen();
+				}else if(element.webkitRequestFullscreen) {
+					element.webkitRequestFullscreen();
+				}else if(element.msRequestFullscreen) {
+					element.msRequestFullscreen();
+				}
+			}
+			launchFullScreen(document.documentElement);
+			(function reSetRem(){
+				var body = document.getElementsByTagName("html")[0];
+				var rem = screen.availWidth/10;
+				body.style.fontSize = rem+"px";
+				body.style.height = screen.availHeight+"px";
+			})();
+		}else{
+			return false;
+		}
+	});
+</script>
+<script type="text/javascript">
+	var myApp = angular.module("myApp", ["ngRoute"]);
+
+	myApp.config(function ($routeProvider){
+
+		$routeProvider.when("/", {
+			template: '<ul><li ng-repeat="name in names"><a href="#{{name.name}}">{{name.name}}</a></li><ul>',
+			controller: "NameListCtrl"
+		}).when("/:id", {
+			template: '<h1>TODO create country detail view</h1>',
+			controller: "NameCtrl"
+		}).otherwise({
+			redirectTo: "/"
+		})
+
+	});
+
+	myApp.controller("NameListCtrl", function ($scope, $http){
+		$http.get("a.json").success(function (data){
+			$scope.names = data;
+		});
+	});
+
+	myApp.controller("NameCtrl", function ($scope, $routeParams){
+		console.log($routeParams);
+	})
+
+	// myApp.controller("bar", function ($scope){
+	// 	$scope.name = "Index";
+	// 	// console.log($scope);
+	// });
+</script>
+</html>

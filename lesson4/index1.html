@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>myApp</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui" />
+	<link rel="stylesheet" type="text/css" href="css/ionic.min.css">
+	<script type="text/javascript" src="js/ionic.bundle.js"></script>
+</head>
+<body ng-app="myApp">
+<!-- 	<ion-side-menus>
+Center content
+<ion-side-menu-content ng-controller="ContentController">
+</ion-side-menu-content>
+
+Left menu
+<ion-side-menu side="left">
+</ion-side-menu>
+
+Right menu
+<ion-side-menu side="right">
+</ion-side-menu>
+</ion-side-menus> -->
+<div ng-controller="demo">
+	<a ng-click="show();">1233</a>
+	<a ng-click="show();">1233</a>
+	<a ng-click="show();">1233</a>
+	<a ng-click="show();">1233</a>
+	<a ng-click="show();">1233</a>
+	<a ng-click="show();">1233</a>
+</div>
+
+</body>
+<script type="text/javascript">
+	var myApp = angular.module('myApp', ['ionic']);
+
+	// console.log(myApp)
+
+	myApp.controller("demo", function ($scope, $ionicActionSheet, $timeout) {
+
+		// Triggered on a button click, or some other target
+		$scope.show = function() {
+
+		// alert(1);
+
+		// Show the action sheet
+			var hideSheet = $ionicActionSheet.show({
+				buttons: [
+				{ text: '<b>Share</b> This' },
+				{ text: 'Move' }
+				],
+				destructiveText: 'Delete',
+				titleText: 'Modify your album',
+				cancelText: 'Cancel',
+				cancel: function() {
+				// add cancel code..
+				},
+				buttonClicked: function(index) {
+				return true;
+				}
+			});
+
+			// For example's sake, hide the sheet after two seconds
+			// $timeout(function() {
+			// hideSheet();
+			// }, 2000);
+
+		};
+	});
+</script>
+</html>
