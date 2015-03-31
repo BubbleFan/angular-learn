@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en" ng-app="myApp">
+<head>
+	<meta charset="UTF-8">
+	<title>myApp</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui" />
+	<link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">
+	<script type="text/javascript" src="js/angular/angular.min.js"></script>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.10/angular-route.min.js"></script>
+	<style type="text/css">
+		body, ul, ol, p{
+			margin: 0;
+			padding: 0;
+		}
+		body{
+			padding-top: 1.4rem;
+			font-family: "Microsoft Yahei"
+		}
+		li{
+			list-style: none;
+		}
+		.nav{
+			width: 100%;
+			position: fixed;
+			left: 0;
+			text-align: center;
+			display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
+			display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
+			display: -ms-flexbox;      /* TWEENER - IE 10 */
+			display: -webkit-flex;     /* NEW - Chrome */
+			display: flex;
+		}
+
+		.head{
+			height: 1.4rem;
+			top: 0;
+			background-color: #ffffff;
+			border-bottom: 1px solid #e7e7e7;
+		}
+		.head span{
+			width: 100%;
+			position: absolute;
+			left: 0;
+			line-height: 1.4rem;
+			font-size: .54rem;
+			font-weight: 200;
+			text-align: center;
+			color: #595959;
+		}
+		.foot{
+			height: 1.44rem;
+			bottom: 0;
+			background-color: #fbfbfb;
+		}
+		.foot a{
+			padding-top: 5px;
+			width: 25%;
+			display: block;
+			font-size: 0.1rem;
+			text-decoration: none;
+			color: #888888;
+		}
+		.foot a.active{
+			color: #cc5500;
+		}
+		.foot a i{
+			font-size: .65rem;
+		}
+		.foot a span{
+			line-height: .6rem;
+			font-size: .3rem;
+		}
+
+		.carousel{
+			width: 100%;
+			height: 3.5rem;
+			position: relative;
+			overflow: hidden;
+		}
+		.carousel ul{
+			height: 100%;
+			position: absolute;
+			left: -10rem;
+			top: 0;
+		}
+		.carousel ul li{
+			width: 10rem;
+			height: 100%;
+			float: left;
+		}
+		.carousel ul li:nth-child(1){
+			background-color: #cc5500;
+		}
+		.carousel ul li:nth-child(2){
+			background-color: #ff5500;
+		}
+		.carousel ul li:nth-child(3){
+			background-color: #550055;
+		}
+		.carousel ol{
+			width: 100%;
+			position: absolute;
+			left: 0;
+			bottom: 0;
+			text-align: center;
+		}
+		.carousel ol li{
+			padding: 0 6px;
+			font-size: 14px;
+			display: inline-block;
+			color: #fbfbfb;
+		}
+		.carousel ol li.active{
+			color: #ff5500;
+		}
+	</style>
+</head>
+<body>
+	
+	<div ng-view></div>
+	<div class="carousel" id="carousel">
+		<ul>
+			<li><a href="#"><img src="" alt=""></a></li>
+			<li><a href="#"><img src="" alt=""></a></li>
+			<li><a href="#"><img src="" alt=""></a></li>
+		</ul>
+		<ol>
+		</ol>
+	</div>
+	<div class="nav foot" id="foot">
+		<a href="#/home">
+			<i class="fa fa-star-o"></i><br>
+			<span>精选推荐</span>
+		</a>
+		<a href="#/pro">
+			<i class="fa fa-list-ul"></i><br>
+			<span>产品列表</span>
+		</a>
+		<a href="#/cash">
+			<i class="fa fa-archive"></i><br>
+			<span>我的资产</span>
+		</a>
+		<a href="#/more">
+			<i class="fa fa-ellipsis-h"></i><br>
+			<span>更多</span>
+		</a>
+	</div>
+
+</body>
+
+<script type="text/javascript">
+	(function reSetRem(){
+		var html = document.getElementsByTagName("html")[0];
+		var rem = screen.availWidth/10;
+		html.style.fontSize = rem+"px";
+		// body.style.height = screen.availHeight+"px";
+
+		var foot_link = document.getElementById("foot").getElementsByTagName("a");
+
+		for(var i=0; i<foot_link.length; i++){
+			foot_link[i].i = i
+			foot_link[i].onclick = function (){
+				for(var i=0; i<foot_link.length; i++){
+					foot_link[i].className = "";
+				}
+				foot_link[0].getElementsByTagName("i")[0].className = "fa fa-star-o";
+				this.className = "active";
+				if(this.i===0){
+					if(this.className === "active"){
+						this.getElementsByTagName("i")[0].className = "fa fa-star";
+					}
+				}
+			}
+
+		}
+
+		var carousel = document.getElementById("carousel");
+		var carouselUl = carousel.getElementsByTagName("ul")[0];
+		var carouselLen = carouselUl.getElementsByTagName("li").length;
+		var carouselOl = carousel.getElementsByTagName("ol")[0];
+
+		carouselUl.style.width = carouselLen*10+"rem";
+		for(var i=0; i<carouselLen; i++){
+			var li = document.createElement("li");
+			if(i === 0){
+				li.innerHTML = '<i class="fa fa-circle"></i>';
+				li.className = "active"
+			}else{
+				li.innerHTML = '<i class="fa fa-circle-o"></i>';
+			}
+			carouselOl.appendChild(li);
+		}
+
+		var timer = null;
+
+		timer = setInterval(function(){
+
+
+
+		}, 3000);
+
+	})();
+</script>
+<script type="text/javascript">
+	var myApp = angular.module('myApp', ['ngRoute']);
+
+	myApp.config(function ($routeProvider){
+
+		$routeProvider.when("/", {
+			url: "/home",
+			abstract: true,
+			templateUrl: 'home.html',
+			controller: "HomeCtrl"
+		}).when("/pro", {
+			url: "/pro",
+			abstract: true,
+			templateUrl: "pro.html",
+			controller: "ProCtrl"
+		}).when("/cash", {
+			url: "/cash",
+			abstract: true,
+			templateUrl: "cash.html",
+			controller: "CashCtrl"
+		}).when("/more", {
+			url: "/more",
+			abstract: true,
+			templateUrl: "more.html",
+			controller: "MoreCtrl"
+		}).otherwise({
+			redirectTo: "/"
+		})
+
+	});
+
+	myApp.controller("HomeCtrl", function ($scope){
+		$scope.title = "精选推荐";
+	});
+	myApp.controller("ProCtrl", function ($scope){
+		$scope.title = "产品列表";
+	});
+	myApp.controller("CashCtrl", function ($scope){
+		$scope.title = "我的资产";
+	});
+	myApp.controller("MoreCtrl", function ($scope){
+		$scope.title = "更多";
+	});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+</script>
+</html>
