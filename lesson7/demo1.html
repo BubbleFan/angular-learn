@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en" ng-app="myApp">
+<head>
+	<meta charset="UTF-8">
+	<title>myApp</title>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.min.js"></script>
+</head>
+<body>
+	
+<div ng-controller="SomeController">
+	{{someBareValue.x}}
+
+	<button ng-click="someAction()">Communicate to child</button>
+	
+	<div ng-controller="ChildController">
+		{{someBareValue.x}}
+
+		<button ng-click="childAction()">Communicate to parent</button>
+	</div>
+
+</div>
+
+</body>
+
+
+
+<script type="text/javascript">
+	var myApp = angular.module('myApp', []);
+
+	myApp.controller("SomeController", function ($scope){
+
+		$scope.someBareValue = {x:"hello world!"};
+
+		$scope.someAction = function (){
+
+			$scope.someBareValue.x = "hello world!" + Math.random();
+
+		}
+
+	});
+
+	myApp.controller("ChildController", function ($scope){
+
+		$scope.childAction = function (){
+
+			$scope.someBareValue.x = "child wordl---> " + Math.random();
+
+		}
+
+	})
+
+</script>
+</html>

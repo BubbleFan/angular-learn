@@ -64,6 +64,9 @@
 		.foot a.active{
 			color: #ff5500;
 		}
+		.foot a:visited{
+			border: none;
+		}
 		.foot a i{
 			font-size: .65rem;
 		}
@@ -123,13 +126,56 @@
 		.carousel ol li.active{
 			color: #ff5500;
 		}
+
+		/*pro*/
+		.pro{
+			width: 100%;
+			padding: 1rem 0 0 0;
+			display: box;
+			display: -webkit-box;
+			overflow: hidden;
+			background-color: #e8e8e8;
+			font-size: 0.6rem;
+		}
+		.pro_list{
+			width: 90%;
+			height: 80%;
+			padding: 0 5%;
+			position: relative;
+			background-color: #ffffff;
+		}
+		.pro_list li{
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			left: 0;
+			top: 0;
+			z-index: 1;
+			border-radius: 10px;
+			transform: matrix(0.5, 0, 0, 0.7, 50, 10);
+			-moz-transform: matrix(0.5, 0, 0, 0.7, 50, 10);
+			-webkit-transform: matrix(.5, 0, 0, .7, 50, 10);
+		}
+		.pro_list li:nth-child(1){
+			transform: matrix(0.6, 0, 0, 0.9, 0, 0);
+			-moz-transform: matrix(0.6, 0, 0, 0.9, 0, 0);
+			-webkit-transform: matrix(.6, 0, 0, .9, 0, 0);
+		}
 	</style>
 </head>
 <body>
 	
 	<div ng-view></div>
 	
-	<div id="get"></div>
+	<div class="pro" id="pro">
+		<ul class="pro_list">
+			<li style="background-color: #123456"></li>
+			<li style="background-color: green"></li>
+			<li style="background-color: blue"></li>
+			<li style="background-color: red"></li>
+		</ul>
+	</div>
+
 	<div class="nav foot" id="foot">
 		<a href="#/home" class="active">
 			<i class="fa fa-star"></i><br>
@@ -155,6 +201,7 @@
 	<div class="nav head">
 		<span>{{title}}</span>
 	</div>
+	<!--
 	<div class="carousel" id="carousel">
 		<ul>
 			<li style="background-color: #0c63ee"><a href="#"><img src="" alt=""></a></li>
@@ -164,12 +211,12 @@
 		<ol>
 		</ol>
 	</div>
+	-->
 </script>
 <!-- pro template -->
 <script type="text/ng-template" id="pro.html">
 	<div class="nav head">
 		<span>{{title}}</span>
-	<ul></ul>
 	</div>
 </script>
 <!-- cash template -->
@@ -186,11 +233,21 @@
 </script>
 
 <script type="text/javascript">
-	(function reSetRem(){
+	function reSetRem(){
 		var html = document.getElementsByTagName("html")[0];
-		var rem = screen.availWidth/10;
+		var rem = document.body.clientWidth/10;
+		if(window.navigator.userAgent.match(/Firefox/gi)){
+			rem = screen.availWidth/10;
+		}
 		html.style.fontSize = rem+"px";
-	})();
+		// // document.getElementById("get2").innerHTML = rem;
+
+		// setInterval(function(){
+		// 	var rem = document.getElementsByTagName("html")[0].style.fontSize;
+		// 	document.getElementById("get2").innerHTML = rem+Math.random();
+		// },1000)
+	}
+	reSetRem();
 </script>
 
 <script type="text/javascript">
@@ -215,86 +272,138 @@
 
 	}
 </script>
+
+
+
+
 <script type="text/javascript">
-	function run(){
-		var carousel = document.getElementById("carousel");
-		var carouselUl = carousel.getElementsByTagName("ul")[0];
-		var carouselLen = carouselUl.getElementsByTagName("li").length;
-		var carouselOl = carousel.getElementsByTagName("ol")[0];
+	function setProHeight(){
 
-		carouselUl.style.width = carouselLen*10+"rem";
-		for(var i=0; i<carouselLen; i++){
-			var li = document.createElement("li");
-			if(i === 0){
-				li.innerHTML = '<i class="fa fa-circle"></i>';
-				li.className = "active"
-			}else{
-				li.innerHTML = '<i class="fa fa-circle-o"></i>';
-			}
-			carouselOl.appendChild(li);
+		var pro = document.getElementById("pro");
+
+		var proH = window.innerHeight - document.body.clientWidth/10*2 - 30;
+
+		if(window.navigator.userAgent.match(/Firefox/gi)){
+			proH = window.innerHeight - screen.availWidth/10*2 - 30;
 		}
+		
+		pro.style.height = proH + "px";
 
-		var timer = null, index = 0;
-		// clearInterval(timer);
-		timer = setInterval(function(){
-			// clearInterval(timer);
-			index++;
-			index = index%3;
-			runCarousel(index);
-		}, 3000);
+	}
+	
+	setProHeight();
 
-		var get = document.getElementById("get");
+</script>
+<script type="text/javascript">
+	
+	window.addEventListener("resize", function(){
+		setProHeight();
+	})
 
-		carousel.addEventListener("touchstart", function carouselStart(e){
+</script>
+
+<script type="text/javascript">
+	
+	var proList = document.getElementById("pro").getElementsByTagName("ul")[0];
+	var proE = proList.getElementsByTagName("li");
+	var proLen = proList.getElementsByTagName("li").length;
+
+	var proAnimate = [];
+
+	// var proTimer = null, proOnOff = false;
+
+	for(var i=0; i<proLen; i++){
+
+		proE[i].style.zIndex = proLen-i;
+		proE[i].style.transform = "matrix("+(0.6-i*0.25)+", 0, 0, "+(0.9-i*0.5)+", "+-i*70+", 10)";
+		proE[i].style.transition =  "all .3s ease-in-out";
+
+		console.log("matrix("+(0.6-i*0.25)+", 0, 0, "+(0.9-i*0.5)+", "+-i*70+", 10)")
+
+		proAnimate.push(proE[i]);
+
+	}
+
+	// proAnimate.forEach(function (el, i){
+
+		proList.addEventListener("touchstart", function proSwapSatrt (e){
+
+			// var changedDom = this;
+
+			var changedDom = e.path[0];
+
+			if(changedDom == proList) return false;
+
 			var SX = e.changedTouches[0].clientX;
 			var SY = e.changedTouches[0].clientY;
 
-			clearInterval(timer);
+			document.addEventListener("touchend", function proSwapEnd (e){
 
-			document.addEventListener("touchend", function documentEnd(e){
 				var EX = e.changedTouches[0].clientX;
 				var EY = e.changedTouches[0].clientY;
 
 				var X = EX - SX, Y = EY - SY;
 
-				if(X<20){
-
-					index++;
-					index = index%3;
-					runCarousel(index);
-
-				}else if(X>20){
-
-					index--;
-					if(index<0) index = 0;
-					index = index%3;
-					runCarousel(index);
-
+				if(X>50){
+					changedDom.style.transform = "matrix(.6, 0, 0, .9, "+500+", 0)";
+				}else if(X<-50){
+					changedDom.style.transform = "matrix(.6, 0, 0, .9, "+-500+", 0)";
 				}
-				clearInterval(timer);
-				timer = setInterval(function(){
-					// clearInterval(timer);
-					index = index%3;
-					runCarousel(index);
-					index++;
-				}, 3000);
+
+				console.log(changedDom)
+
+				proAnimate.push(proAnimate.shift())
+
+				setTimeout(function(){
+
+					proAnimate.forEach(function (e, i){
+
+						e.style.transform = "matrix("+0.6-i*0.25+", 0, 0, "+0.9-i*0.5+", "+-i*70+", 10)";
+						
+						e.style.zIndex = proLen-i;
+
+					})
+					// changedDom.style.transform = "matrix(0.5, 0, 0, 0.7, 50, 10)";
+				},500)
+				
+				changedDom = null;
+				// console.log(currentI);
+
+				// document.addEventListener("touchend", null)
+				return false;
 
 			});
+			
+			// alert(1);
+			return false;
+
 		});
+	// })
 
-		function runCarousel(index){
-			get.innerHTML = index;
-			carouselUl.className = "active"+(index+1);
-			for(var i=0; i<carouselLen; i++){
-				carouselOl.getElementsByTagName("li")[i].className = "";
-				carouselOl.getElementsByTagName("li")[i].getElementsByTagName("i")[0].className = "fa fa-circle-o";
-			}
-			carouselOl.getElementsByTagName("li")[index].className = "active";
-			carouselOl.getElementsByTagName("li")[index].getElementsByTagName("i")[0].className = "fa fa-circle";
 
-		}
-	}
+	
+
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <script type="text/javascript">
 	var myApp = angular.module('myApp', ['ngRoute']);
 
@@ -328,7 +437,7 @@
 
 	myApp.controller("HomeCtrl", function ($scope){
 		$scope.title = "精选推荐";
-		run();
+		// run();
 	});
 	myApp.controller("ProCtrl", function ($scope){
 		$scope.title = "产品列表";
@@ -355,5 +464,87 @@
 
 	
 
+</script>
+
+
+<script type="text/javascript">
+	function run(){
+		var carousel = document.getElementById("carousel");
+		var carouselUl = carousel.getElementsByTagName("ul")[0];
+		var carouselLen = carouselUl.getElementsByTagName("li").length;
+		var carouselOl = carousel.getElementsByTagName("ol")[0];
+
+		carouselUl.style.width = carouselLen*10+"rem";
+		for(var i=0; i<carouselLen; i++){
+			var li = document.createElement("li");
+			if(i === 0){
+				li.innerHTML = '<i class="fa fa-circle"></i>';
+				li.className = "active"
+			}else{
+				li.innerHTML = '<i class="fa fa-circle-o"></i>';
+			}
+			carouselOl.appendChild(li);
+		}
+
+		var timer = null, index = 0;
+		// clearInterval(timer);
+		timer = setInterval(function(){
+			// clearInterval(timer);
+			index++;
+			index = index%3;
+			runCarousel(index);
+		}, 3000);
+
+		// var get = document.getElementById("get");
+
+		carousel.addEventListener("touchstart", function carouselStart(e){
+			var SX = e.changedTouches[0].clientX;
+			var SY = e.changedTouches[0].clientY;
+
+			clearInterval(timer);
+
+			document.addEventListener("touchend", function documentEnd(e){
+				var EX = e.changedTouches[0].clientX;
+				var EY = e.changedTouches[0].clientY;
+
+				var X = EX - SX, Y = EY - SY;
+
+				if(X<-20){
+
+					index++;
+					index = index%3;
+					runCarousel(index);
+
+				}else if(X>20){
+
+					index--;
+					if(index<0) index = 0;
+					index = index%3;
+					runCarousel(index);
+
+				}
+				clearInterval(timer);
+				timer = setInterval(function(){
+					// clearInterval(timer);
+					index = index%3;
+					runCarousel(index);
+					index++;
+				}, 3000);
+
+			});
+		});
+
+		function runCarousel(index){
+			// get.innerHTML = index;
+			carouselUl.className = "active"+(index+1);
+			for(var i=0; i<carouselLen; i++){
+				carouselOl.getElementsByTagName("li")[i].className = "";
+				carouselOl.getElementsByTagName("li")[i].getElementsByTagName("i")[0].className = "fa fa-circle-o";
+			}
+			carouselOl.getElementsByTagName("li")[index].className = "active";
+			carouselOl.getElementsByTagName("li")[index].getElementsByTagName("i")[0].className = "fa fa-circle";
+
+		}
+	}
 </script>
 </html>
