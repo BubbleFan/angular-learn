@@ -130,7 +130,7 @@
 		/*pro*/
 		.pro{
 			width: 100%;
-			padding: 1rem 0 0 0;
+			padding: .5rem 0 0 0;
 			display: box;
 			display: -webkit-box;
 			overflow: hidden;
@@ -139,7 +139,7 @@
 		}
 		.pro_list{
 			width: 90%;
-			height: 80%;
+			height: 90%;
 			padding: 0 5%;
 			position: relative;
 			background-color: #ffffff;
@@ -155,26 +155,15 @@
 			transform: matrix(0.5, 0, 0, 0.7, 50, 10);
 			-moz-transform: matrix(0.5, 0, 0, 0.7, 50, 10);
 			-webkit-transform: matrix(.5, 0, 0, .7, 50, 10);
-		}
-		.pro_list li:nth-child(1){
-			transform: matrix(0.6, 0, 0, 0.9, 0, 0);
-			-moz-transform: matrix(0.6, 0, 0, 0.9, 0, 0);
-			-webkit-transform: matrix(.6, 0, 0, .9, 0, 0);
+			transition : all .3s ease-in-out;
+			-moz-transform : all .3s ease-in-out;
+			-webkit-transform : all .3s ease-in-out;
 		}
 	</style>
 </head>
 <body>
 	
 	<div ng-view></div>
-	
-	<div class="pro" id="pro">
-		<ul class="pro_list">
-			<li style="background-color: #123456"></li>
-			<li style="background-color: green"></li>
-			<li style="background-color: blue"></li>
-			<li style="background-color: red"></li>
-		</ul>
-	</div>
 
 	<div class="nav foot" id="foot">
 		<a href="#/home" class="active">
@@ -201,7 +190,7 @@
 	<div class="nav head">
 		<span>{{title}}</span>
 	</div>
-	<!--
+
 	<div class="carousel" id="carousel">
 		<ul>
 			<li style="background-color: #0c63ee"><a href="#"><img src="" alt=""></a></li>
@@ -211,12 +200,20 @@
 		<ol>
 		</ol>
 	</div>
-	-->
+
 </script>
 <!-- pro template -->
 <script type="text/ng-template" id="pro.html">
 	<div class="nav head">
 		<span>{{title}}</span>
+	</div>
+	<div class="pro" id="pro">
+		<ul class="pro_list">
+			<li style="background-color: #123456"></li>
+			<li style="background-color: green"></li>
+			<li style="background-color: blue"></li>
+			<li style="background-color: red"></li>
+		</ul>
 	</div>
 </script>
 <!-- cash template -->
@@ -251,26 +248,24 @@
 </script>
 
 <script type="text/javascript">
-	var foot_link = document.getElementById("foot").getElementsByTagName("a");
 
-	for(var i=0; i<foot_link.length; i++){
-		foot_link[i].i = i
 
-		foot_link[i].addEventListener("touchend", function (){
+	function footActive(index){
 
-			for(var i=0; i<foot_link.length; i++){
-				foot_link[i].className = "";
-			}
-			foot_link[0].getElementsByTagName("i")[0].className = "fa fa-star-o";
-			this.className = "active";
-			if(this.i===0){
-				if(this.className === "active"){
-					this.getElementsByTagName("i")[0].className = "fa fa-star";
-				}
-			}
-		});
+		var foot_link = document.getElementById("foot").getElementsByTagName("a");
 
+		for(var i=0; i<foot_link.length; i++){
+			foot_link[i].className = "";
+		}
+		foot_link[0].getElementsByTagName("i")[0].className = "fa fa-star-o";
+		foot_link[index].className = "active";
+
+		if(index===0){
+			foot_link[index].getElementsByTagName("i")[0].className = "fa fa-star";
+
+		}
 	}
+	
 </script>
 
 
@@ -291,7 +286,7 @@
 
 	}
 	
-	setProHeight();
+	// setProHeight();
 
 </script>
 <script type="text/javascript">
@@ -304,103 +299,79 @@
 
 <script type="text/javascript">
 	
-	var proList = document.getElementById("pro").getElementsByTagName("ul")[0];
-	var proE = proList.getElementsByTagName("li");
-	var proLen = proList.getElementsByTagName("li").length;
+	function proRun(){
 
-	var proAnimate = [];
+		var proList = document.getElementById("pro").getElementsByTagName("ul")[0];
+		var proE = proList.getElementsByTagName("li");
+		var proLen = proList.getElementsByTagName("li").length;
 
-	// var proTimer = null, proOnOff = false;
+		var proAnimate = [];
 
-	for(var i=0; i<proLen; i++){
+		for(var i=0; i<proLen; i++){
 
-		proE[i].style.zIndex = proLen-i;
-		proE[i].style.transform = "matrix("+(0.6-i*0.25)+", 0, 0, "+(0.9-i*0.5)+", "+-i*70+", 10)";
-		proE[i].style.transition =  "all .3s ease-in-out";
+			proE[i].style.zIndex = proLen-i;
+			proE[i].style.transform = "matrix("+(0.6-i*0.1)+", 0, 0, "+(0.9-i*0.15)+", "+(50+-i*50)+", 10)";
+			proE[i].style["-moz-transform"] = "matrix("+(0.6-i*0.1)+", 0, 0, "+(0.9-i*0.15)+", "+(50+-i*50)+", 10)";
+			proE[i].style["-webkit-transform"] = "matrix("+(0.6-i*0.1)+", 0, 0, "+(0.9-i*0.15)+", "+(50+-i*50)+", 10)";
 
-		console.log("matrix("+(0.6-i*0.25)+", 0, 0, "+(0.9-i*0.5)+", "+-i*70+", 10)")
+			proAnimate.push(proE[i]);
 
-		proAnimate.push(proE[i]);
+		}
 
-	}
+		proAnimate.forEach(function (el, i){
 
-	// proAnimate.forEach(function (el, i){
+			el.addEventListener("touchstart", function proSwapSatrt (e){
 
-		proList.addEventListener("touchstart", function proSwapSatrt (e){
+				var changedDom = this;
 
-			// var changedDom = this;
+				var SX = e.changedTouches[0].clientX;
+				var SY = e.changedTouches[0].clientY;
 
-			var changedDom = e.path[0];
+				document.addEventListener("touchend", function proSwapEnd (e){
 
-			if(changedDom == proList) return false;
+					var EX = e.changedTouches[0].clientX;
+					var EY = e.changedTouches[0].clientY;
 
-			var SX = e.changedTouches[0].clientX;
-			var SY = e.changedTouches[0].clientY;
+					var X = EX - SX, Y = EY - SY;
 
-			document.addEventListener("touchend", function proSwapEnd (e){
+					if(X>100){
+						changedDom.style.transform = "matrix(.6, 0, 0, .9, "+400+", 0)";
+						changedDom.style["-moz-transform"] = "matrix(.6, 0, 0, .9, "+400+", 0)";
+						changedDom.style["-webkit-transform"] = "matrix(.6, 0, 0, .9, "+400+", 0)";
+					}else if(X<-100){
+						changedDom.style.transform = "matrix(.6, 0, 0, .9, "+-400+", 0)";
+						changedDom.style["-moz-transform"] = "matrix(.6, 0, 0, .9, "+-400+", 0)";
+						changedDom.style["-webkit-transform"] = "matrix(.6, 0, 0, .9, "+-400+", 0)";
+					}else{
+						return false;
+					}
 
-				var EX = e.changedTouches[0].clientX;
-				var EY = e.changedTouches[0].clientY;
+					proAnimate.push(proAnimate.shift());
 
-				var X = EX - SX, Y = EY - SY;
+					setTimeout(function(){
 
-				if(X>50){
-					changedDom.style.transform = "matrix(.6, 0, 0, .9, "+500+", 0)";
-				}else if(X<-50){
-					changedDom.style.transform = "matrix(.6, 0, 0, .9, "+-500+", 0)";
-				}
+						proAnimate.forEach(function (e, i){
 
-				console.log(changedDom)
+							e.style.transform = "matrix("+(0.6-i*0.1)+", 0, 0, "+(0.9-i*0.15)+", "+(50+-i*50)+", 10)";
+							e.style["-moz-transform"] = "matrix("+(0.6-i*0.1)+", 0, 0, "+(0.9-i*0.15)+", "+(50+-i*50)+", 10)";
+							e.style["-webkit-transform"] = "matrix("+(0.6-i*0.1)+", 0, 0, "+(0.9-i*0.15)+", "+(50+-i*50)+", 10)";
+							
+							e.style.zIndex = proLen-i;
 
-				proAnimate.push(proAnimate.shift())
+						});
 
-				setTimeout(function(){
+					},200);
 
-					proAnimate.forEach(function (e, i){
-
-						e.style.transform = "matrix("+0.6-i*0.25+", 0, 0, "+0.9-i*0.5+", "+-i*70+", 10)";
-						
-						e.style.zIndex = proLen-i;
-
-					})
-					// changedDom.style.transform = "matrix(0.5, 0, 0, 0.7, 50, 10)";
-				},500)
-				
-				changedDom = null;
-				// console.log(currentI);
-
-				// document.addEventListener("touchend", null)
-				return false;
+					return document.removeEventListener("touchend", proSwapEnd);
+					 
+				});
 
 			});
-			
-			// alert(1);
-			return false;
-
 		});
-	// })
-
-
+	}
 	
 
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -413,21 +384,33 @@
 			url: "/home",
 			abstract: true,
 			templateUrl: 'home.html',
+			scope: {
+				route : "home"
+			},
 			controller: "HomeCtrl"
 		}).when("/pro", {
 			url: "/pro",
 			abstract: true,
 			templateUrl: "pro.html",
+			scope: {
+				route : "pro"
+			},
 			controller: "ProCtrl"
 		}).when("/cash", {
 			url: "/cash",
 			abstract: true,
 			templateUrl: "cash.html",
+			scope: {
+				route : "cash"
+			},
 			controller: "CashCtrl"
 		}).when("/more", {
 			url: "/more",
 			abstract: true,
 			templateUrl: "more.html",
+			scope: {
+				route : "more"
+			},
 			controller: "MoreCtrl"
 		}).otherwise({
 			redirectTo: "/"
@@ -437,29 +420,23 @@
 
 	myApp.controller("HomeCtrl", function ($scope){
 		$scope.title = "精选推荐";
-		// run();
+		footActive(0);
+		run();
 	});
 	myApp.controller("ProCtrl", function ($scope){
 		$scope.title = "产品列表";
+		footActive(1);
+		setProHeight();
+		proRun();
 	});
 	myApp.controller("CashCtrl", function ($scope){
 		$scope.title = "我的资产";
+		footActive(2);
 	});
 	myApp.controller("MoreCtrl", function ($scope){
 		$scope.title = "更多";
+		footActive(3);
 	});
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 	
@@ -493,6 +470,7 @@
 			index++;
 			index = index%3;
 			runCarousel(index);
+			console.log(index+"--"+new Date().getTime());
 		}, 3000);
 
 		// var get = document.getElementById("get");
@@ -514,6 +492,7 @@
 					index++;
 					index = index%3;
 					runCarousel(index);
+					console.log(index+"--"+new Date().getTime());
 
 				}else if(X>20){
 
@@ -522,14 +501,20 @@
 					index = index%3;
 					runCarousel(index);
 
+				}else{
+					return false;
 				}
 				clearInterval(timer);
+
 				timer = setInterval(function(){
 					// clearInterval(timer);
 					index = index%3;
 					runCarousel(index);
+					console.log(index+"--"+new Date().getTime());
 					index++;
 				}, 3000);
+
+				document.removeEventListener("touchend", documentEnd);
 
 			});
 		});
