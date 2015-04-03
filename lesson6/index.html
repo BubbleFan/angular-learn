@@ -8,7 +8,7 @@
 	<script type="text/javascript" src="js/angular/angular.min.js"></script>
 	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.10/angular-route.min.js"></script>
 	<style type="text/css">
-		body, ul, ol, p{
+		body, ul, ol, p, h2{
 			margin: 0;
 			padding: 0;
 		}
@@ -19,14 +19,18 @@
 		li{
 			list-style: none;
 		}
+		a{
+			text-decoration: none;
+		}
+		/*nav*/
 		.nav{
 			width: 100%;
 			position: fixed;
 			left: 0;
 			z-index: 999;
 			text-align: center;
-			display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
-			display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
+			display: box;
+			display: -webkit-box;
 			display: -ms-flexbox;      /* TWEENER - IE 10 */
 			display: -webkit-flex;     /* NEW - Chrome */
 			display: flex;
@@ -74,7 +78,7 @@
 			line-height: .6rem;
 			font-size: .3rem;
 		}
-		
+		/*图片轮播*/
 		.carousel{
 			width: 100%;
 			height: 3.5rem;
@@ -127,7 +131,7 @@
 			color: #ff5500;
 		}
 
-		/*pro*/
+		/*产品列表*/
 		.pro{
 			width: 100%;
 			padding: .5rem 0 0 0;
@@ -151,13 +155,74 @@
 			left: 0;
 			top: 0;
 			z-index: 1;
-			border-radius: 10px;
+			border-radius: 10px;/*
 			transform: matrix(0.5, 0, 0, 0.7, 50, 10);
 			-moz-transform: matrix(0.5, 0, 0, 0.7, 50, 10);
 			-webkit-transform: matrix(.5, 0, 0, .7, 50, 10);
 			transition : all .3s ease-in-out;
-			-moz-transform : all .3s ease-in-out;
-			-webkit-transform : all .3s ease-in-out;
+			-moz-transition : all .3s ease-in-out;
+			-webkit-transition : all .3s ease-in-out;*/
+		}
+		/*我的资产*/
+		.cash{
+			letter-spacing: -1px;
+		}
+		.cash_top{
+			padding: .5rem;
+			height: 3.3rem;
+			background-color: #ff5500;
+			font-size: .5rem;
+			color: #ffffff;
+		}
+		.cash_top p{
+			position: relative;
+			height: 1rem;
+			line-height: 1rem;
+		}
+		.cash_top a{
+			position: absolute;
+			right: 0;
+			color: #ffffff;
+		}
+		.cash_top a i{
+			font-size: .6rem;
+		}
+		.cash_top h2{
+			line-height: 3rem;
+			font-weight: 100;
+			font-size: 2rem;
+			font-family: Arial;
+		}
+		.cash_middle{
+			height: 2.5rem;
+			padding: .5rem;
+			background-color: #ffffff;
+			border-bottom: 1px solid red;
+		}
+		.cash_middle p{
+			line-height: .5rem;
+			font-size: .5rem;
+			color: #939393;
+		}
+		.cash_middle h2{
+			line-height: 2.4rem;
+			font-weight: 100;
+			font-size: 1.6rem;
+			font-family: Arial;
+			color: #696969;
+		}
+		.cash_m_yesterday, .cash_m_all{
+			width: 48%;
+			height: 100%;
+			float: left;
+		}
+		.cash_m_all{
+			width: 44%;
+			padding-left: 5%;
+			border-left: 1px solid #c7c7c7;
+		}
+		.cash_m_yesterday h2{
+			color: #cc5500;
 		}
 	</style>
 </head>
@@ -190,7 +255,7 @@
 	<div class="nav head">
 		<span>{{title}}</span>
 	</div>
-
+	<!---->
 	<div class="carousel" id="carousel">
 		<ul>
 			<li style="background-color: #0c63ee"><a href="#"><img src="" alt=""></a></li>
@@ -200,13 +265,14 @@
 		<ol>
 		</ol>
 	</div>
-
+	
 </script>
 <!-- pro template -->
 <script type="text/ng-template" id="pro.html">
 	<div class="nav head">
 		<span>{{title}}</span>
 	</div>
+	<!---->
 	<div class="pro" id="pro">
 		<ul class="pro_list">
 			<li style="background-color: #123456"></li>
@@ -215,11 +281,33 @@
 			<li style="background-color: red"></li>
 		</ul>
 	</div>
+	
 </script>
 <!-- cash template -->
 <script type="text/ng-template" id="cash.html">
 	<div class="nav head">
 		<span>{{title}}</span>
+	</div>
+	<div class="cash" id="cash">
+		<div class="cash_top">
+			<p>
+				<span>总资产（元）</span>
+				<a href="javascript:;">
+					交易记录&nbsp;<i class="fa fa-angle-double-right"></i>
+				</a>
+			</p>
+			<h2>0.00</h2>
+		</div>
+		<div class="cash_middle">
+			<div class="cash_m_yesterday">
+				<p>昨日收益（元）</p>
+				<h2>0.00</h2>
+			</div>
+			<div class="cash_m_all">
+				<p>累计收益（元）</p>
+				<h2>24.16</h2>
+			</div>
+		</div>
 	</div>
 </script>
 <!-- more template -->
@@ -230,6 +318,7 @@
 </script>
 
 <script type="text/javascript">
+	// 重置HTML的rem
 	function reSetRem(){
 		var html = document.getElementsByTagName("html")[0];
 		var rem = document.body.clientWidth/10;
@@ -237,19 +326,13 @@
 			rem = screen.availWidth/10;
 		}
 		html.style.fontSize = rem+"px";
-		// // document.getElementById("get2").innerHTML = rem;
-
-		// setInterval(function(){
-		// 	var rem = document.getElementsByTagName("html")[0].style.fontSize;
-		// 	document.getElementById("get2").innerHTML = rem+Math.random();
-		// },1000)
 	}
 	reSetRem();
 </script>
 
 <script type="text/javascript">
 
-
+	// 切换栏目根据路由给出active
 	function footActive(index){
 
 		var foot_link = document.getElementById("foot").getElementsByTagName("a");
@@ -272,6 +355,8 @@
 
 
 <script type="text/javascript">
+	// 设置products栏目的高度
+	// 在用户切换到产品栏目运行
 	function setProHeight(){
 
 		var pro = document.getElementById("pro");
@@ -284,21 +369,18 @@
 		
 		pro.style.height = proH + "px";
 
+		// 监听页面的缩放，改变产品栏目的高度
+		window.addEventListener("resize", function(){
+			setProHeight();
+		})
+
 	}
-	
-	// setProHeight();
-
-</script>
-<script type="text/javascript">
-	
-	window.addEventListener("resize", function(){
-		setProHeight();
-	})
 
 </script>
 
 <script type="text/javascript">
 	
+	// 产品栏目的列表切换程序
 	function proRun(){
 
 		var proList = document.getElementById("pro").getElementsByTagName("ul")[0];
@@ -319,10 +401,16 @@
 		}
 
 		proAnimate.forEach(function (el, i){
+			// console.log(el, i)
+			el.style.transition = "all .3s ease-in-out";
+			el.style["-moz-transition"] = "all .3s ease-in-out";
+			el.style["-webkit-transition"] = "all .3s ease-in-out";
 
 			el.addEventListener("touchstart", function proSwapSatrt (e){
 
 				var changedDom = this;
+
+				console.log(changedDom)
 
 				var SX = e.changedTouches[0].clientX;
 				var SY = e.changedTouches[0].clientY;
@@ -334,11 +422,11 @@
 
 					var X = EX - SX, Y = EY - SY;
 
-					if(X>100){
+					if(X>70){
 						changedDom.style.transform = "matrix(.6, 0, 0, .9, "+400+", 0)";
 						changedDom.style["-moz-transform"] = "matrix(.6, 0, 0, .9, "+400+", 0)";
 						changedDom.style["-webkit-transform"] = "matrix(.6, 0, 0, .9, "+400+", 0)";
-					}else if(X<-100){
+					}else if(X<-70){
 						changedDom.style.transform = "matrix(.6, 0, 0, .9, "+-400+", 0)";
 						changedDom.style["-moz-transform"] = "matrix(.6, 0, 0, .9, "+-400+", 0)";
 						changedDom.style["-webkit-transform"] = "matrix(.6, 0, 0, .9, "+-400+", 0)";
@@ -362,7 +450,8 @@
 
 					},200);
 
-					return document.removeEventListener("touchend", proSwapEnd);
+					// changedDom = null;
+					document.removeEventListener("touchend", proSwapEnd);
 					 
 				});
 
@@ -378,6 +467,7 @@
 <script type="text/javascript">
 	var myApp = angular.module('myApp', ['ngRoute']);
 
+	// 路由控制
 	myApp.config(function ($routeProvider){
 
 		$routeProvider.when("/", {
@@ -418,6 +508,7 @@
 
 	});
 
+	// 添加控制器
 	myApp.controller("HomeCtrl", function ($scope){
 		$scope.title = "精选推荐";
 		footActive(0);
@@ -445,6 +536,8 @@
 
 
 <script type="text/javascript">
+
+	// 首页的图片轮播程序
 	function run(){
 		var carousel = document.getElementById("carousel");
 		var carouselUl = carousel.getElementsByTagName("ul")[0];
@@ -464,16 +557,13 @@
 		}
 
 		var timer = null, index = 0;
-		// clearInterval(timer);
+
 		timer = setInterval(function(){
-			// clearInterval(timer);
 			index++;
 			index = index%3;
 			runCarousel(index);
 			console.log(index+"--"+new Date().getTime());
 		}, 3000);
-
-		// var get = document.getElementById("get");
 
 		carousel.addEventListener("touchstart", function carouselStart(e){
 			var SX = e.changedTouches[0].clientX;
@@ -507,7 +597,6 @@
 				clearInterval(timer);
 
 				timer = setInterval(function(){
-					// clearInterval(timer);
 					index = index%3;
 					runCarousel(index);
 					console.log(index+"--"+new Date().getTime());
@@ -520,7 +609,6 @@
 		});
 
 		function runCarousel(index){
-			// get.innerHTML = index;
 			carouselUl.className = "active"+(index+1);
 			for(var i=0; i<carouselLen; i++){
 				carouselOl.getElementsByTagName("li")[i].className = "";
