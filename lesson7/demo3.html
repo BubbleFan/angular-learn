@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en" ng-app="myApp">
+<head>
+	<meta charset="UTF-8">
+	<title>myApp</title>
+	<script type="text/javascript" src="../angular--源码分析.js"></script>
+</head>
+<body ng-controller="FormController">
+	<style>
+		input.ng-invalid{
+			border: 1px solid red;
+		}
+		input.ng-valid{
+			border: 1px solid green;
+		}
+		.parent {
+    border: 20px solid #676767;
+    padding : 20px;
+}
+.parent,.directive {
+    position: relative;
+}
+.parent:after,.directive:after {
+    display: inline;
+    color: #fff;
+    font-size: normal;
+    position: absolute;
+    top:-20px;
+    left:-20px;
+    z-index: 100;
+    padding: 1px 5px;
+    background-color: rgba(0,0,0,0.5);
+}
+.parent:after {
+    content: "MainCtrl Scope";
+}
+.directive {
+    padding: 20px;
+    border: 20px solid #cbccdd;
+    margin-top: 20px;
+}
+.directive:after {
+    content: "Directive Scope"
+}
+.line {
+    border-bottom: 1px dotted #ccc;
+    padding: 5px 0;
+}
+	</style>
+	<!--
+	<form name="signup_form" ng-controller="FormController" ng-submit="submitForm()" novalidate>
+			
+		<div ng-repeat="field in fields" ng-form="signup_form_input">
+			<input type="text" name="dynamic_input" ng-required="field.isRequired" ng-model="field.name" placeholder="{{field.placeholder}}" />
+-->
+			<!-- 胀检查后 && value非法 
+			<div ng-show="signup_form_input.dynamic_input.$dirty && signup_form_input.dynamic_input.$invalid">
+				  -
+				<span class="error" ng-show="signup_form_input.dynamic_input.$error.required">
+					this feild is required
+				</span>
+			</div>
+		</div>
+
+		<button type="submit" ng-disabled="signup_form.$invalid"> submit all</button>
+
+	</form>	
+	
+	-->
+	<!-- <h2>{{message}}</h2> -->
+	<!-- <div ng-controller="ParentCtrl">
+		ParentCtrl
+		<div ng-controller="SiblingOneCtrl">
+			SiblingOneCtrl
+			<div ng-controller="ChildCtrl1">ChildCtrl1</div>
+		</div>
+		<div ng-controller="SiblingTwoCtrl">
+			SiblingTwoCtrl
+			<div ng-controller="ChildCtrl2">ChildCtrl2</div>
+		</div>
+	</div> -->
+	
+	<!-- <div my-directive></div> -->
+
+    
+    <div class="parent" ng-controller="MainCtrl">
+        <div class="line">
+            Name inside parent scope is: <strong>{{name}}</strong>  
+            <input type="button" ng-click="reverseName()" value="Reverse name" />
+        </div> 
+        <div class="line">
+            Color inside parent scope is: <strong style="color:{{color}}">{{color|uppercase}}</strong>  
+            <input type="button" ng-click="randomColor()" value="Randomize color" />
+        </div>
+        <div class="directive" my-directive name="name" color="color" reverse="randomColor()"></div>
+    </div>
+
+
+</body>
+
+
+
+<script type="text/javascript">
+	var myApp = angular.module('myApp', []);
+
+
+	// myApp.controller("ParentCtrl", function ($scope){
+	// 	$scope.$on("ChildCtrl:emit", function(){
+	// 		console.log("ParentCtrl:", arguments)
+	// 	});
+
+	// 	$scope.$on("ParentCtrl:broadcast", function(){
+	// 		console.log("ParentCtrl:", arguments);
+	// 	});
+
+	// 	$scope.$evalAsync(function(){
+
+	// 		$scope.$broadcast("ParentCtrl:broadcast", "this's parent broadcast!")
+
+	// 	})
+
+	// });
+	// myApp.controller("SiblingOneCtrl", function ($scope){
+	// 	$scope.$on("ChildCtrl:emit", function(){
+	// 		console.log("SiblingOneCtrl:", arguments)
+	// 	});
+
+	// 	$scope.$on("ParentCtrl:broadcast", function(){
+	// 		console.log("SiblingOneCtrl:", arguments);
+	// 	})
+
+	// })
+	// myApp.controller("SiblingTwoCtrl", function ($scope){
+	// 	$scope.$on("ChildCtrl:emit", function(){
+	// 		console.log("SiblingTwoCtrl:", arguments)
+	// 	});
+
+	// 	$scope.$on("ParentCtrl:broadcast", function(){
+	// 		console.log("SiblingTwoCtrl:", arguments);
+	// 	})
+
+	// })
+	// myApp.controller("ChildCtrl1", function ($scope){
+	// 	$scope.$on("ChildCtrl:emit", function(){
+	// 		console.log("ChildCtrl1:", arguments)
+	// 	});
+
+	// 	$scope.$on("ParentCtrl:broadcast", function(){
+	// 		console.log("ChildCtrl1:", arguments);
+	// 	});
+	// 	// 事件冒泡
+	// 	$scope.$emit("ChildCtrl:emit","this's Emit!")
+
+	// });
+	// myApp.controller("ChildCtrl2", function ($scope){
+	// 	$scope.$on("ChildCtrl:emit", function(){
+	// 		console.log("ChildCtrl2:", arguments)
+	// 	});
+
+	// 	$scope.$on("ParentCtrl:broadcast", function(){
+	// 		console.log("ChildCtrl2:", arguments);
+	// 	});
+	// 	// 事件冒泡
+	// 	// $scope.$emit("ChildCtrl:emit","this's Emit!")
+
+	// })
+
+
+	// myApp.directive("myDirective", function(){
+	// 	return {
+	// 		restrict: "EA",
+	// 		replace: true,
+	// 		scope: true,
+	// 		template: "<span>Hello world</span>",
+	// 		compile: function(tElement){
+	// 			//console.log("compile: ", tElement);
+	// 			return function (scope, elem){
+	// 				//console.log("link:", arguments);
+	// 			}
+	// 		}
+	// 	}
+
+	// }).run(["$injector" ,function ($injector){
+	// 	console.log($injector.get("myDirectiveDirective"))
+	// }])
+
+
+	// var app = angular.module("app", []);
+
+		myApp.controller("MainCtrl", function ($scope){
+		    $scope.name = "Harry";
+		    $scope.color = "#333333";
+		    $scope.reverseName = function(){
+		     $scope.name = $scope.name.split("").reverse().join("");
+		    };
+		    $scope.randomColor = function(){
+		        $scope.color = '#'+Math.floor(Math.random()*16777215).toString(16);
+		    };
+		});
+
+		myApp.directive("myDirective", function(){
+		    
+		    return {
+		        restrict: "EA",
+		        // replace: true,
+		        scope: {
+		            name: "@",
+		            color: "=",
+		            reverse: "&"
+		        },
+		        template: 
+		            ["<div class='line'>",
+		            "Name : <strong>{{name}}</strong>;  Change name:<input type='text' ng-model='name' /><br/>",
+		            "</div><div class='line'>",
+		            "Color : <strong style='color:{{color}}'>{{color|uppercase}}</strong>;  Change color:<input type='text' ng-model='color' /><br/></div>",
+		            "<br/><input type='button' ng-click='reverse()' value='Reverse Name'/>"].join(""),
+		        compile: function(){}
+		    };
+		});
+
+
+
+
+
+
+
+
+
+
+	myApp.controller("FormController", function ($scope, $timeout){
+
+		// $scope.fields = [
+		// 	{
+		// 		placeholder : "Username", isRequired : true
+		// 	},
+		// 	{
+		// 		placeholder : "Password", isRequired : true
+		// 	},
+		// 	{
+		// 		placeholder : "Email(optional)", isRequired : false
+		// 	}
+		// ];
+
+		// $scope.submitForm = function(){
+
+		// 	alert("it works");
+
+		// }
+
+		// $timeout(function(){$scope.message = "go hah ahh a";},2000);
+
+		// setTimeout(function(){
+
+		// 	$scope.message = "go hah ahh a";
+		// 	// $scope.$digest();
+
+		// 	// $scope.$apply(function(){
+
+		// 	// 	$scope.message = "change s a d a da d"
+		// 	// })
+
+
+		// }, 2000)
+
+	});
+// var x = 15;
+// d1: do{
+// 	console.log(x--);
+
+// 	if(x == 10){
+
+// 		break d1;
+// 	}
+
+// } while(x>0)
+
+</script>
+</html>
