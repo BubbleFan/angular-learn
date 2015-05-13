@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myModule">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+<script type="text/javascript" src="../angular--源码分析.js"></script>
+<style>
+.directive{border:1px solid black;width:250px;}
+.directive>.title{background: black;color:#fff;padding:5px 10px;cursor:pointer;}
+.directive>.body{padding:5px 10px}
+</style>
+</head>
+<body>
+<div ng-controller="MyController">
+	<my-directive class="directive" my-directive-title="title">{{text}}</my-directive>
+</div>
+
+<script>
+
+var myModule = angular.module("myModule",[]);
+
+myModule.directive("myDirective",function(){
+
+	return {
+
+		restrict : "E",
+		replace : true,
+		transclude : true,
+		scope　:　{
+			title : "=myDirectiveTitle"
+		},
+		template :　'<div>'
+                 + '<div class="title" ng-click="toggle()">{{title}}</div>'
+                 + '<div class="body" ng-show="showMe" ng-transclude></div>'
+                 + '</div>',
+        link : function(scope,element,attrs){
+
+        	scope.showMe = false;
+        	scope.toggle = function(){
+        		scope.showMe = !scope.showMe;
+        	}
+        }
+	}
+})
+
+myModule.controller("MyController",function($scope){
+
+	$scope.title = '点击展开查看全部内容';
+	$scope.text = '这里就是全部的内容了'
+})
+
+</script>
+</body>
+</html>
